@@ -4,9 +4,9 @@ import random
 import scales
 import sys
 import json
+import notes
 from threading import Thread
 
-NOTES = json.load(open("notes.json"))
 
 def choose_port():
     print("Listing ports:")
@@ -90,4 +90,5 @@ if __name__ == '__main__':
     midi_port = choose_port()
     with mido.open_output(midi_port) as port:
         # play_random_pattern(notes.A_2, 8, scales.MINOR_PENTATONIC, random.randint(1, 5), octaves=1)
-        play_random_in_scale(NOTES["C"][2]["midi_number"], scales.MINOR_PENTATONIC, 4, 2, 2)
+        play_random_in_scale(
+            note=notes.NOTES["C"][2]["midi_number"], scale=scales.SCALES["MINOR_PENTATONIC"], delay=0.3, octaves=2, same_time=2)
