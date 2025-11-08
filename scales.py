@@ -1,5 +1,7 @@
 # Scales
 
+import notes
+
 SCALES = {
     # Major modes
     "MAJOR": [2, 2, 1, 2, 2, 2],
@@ -65,65 +67,158 @@ SCALES = {
     "ORIENTAL": [1, 3, 1, 1, 3, 1]
 }
 
-# 7 chords
+# Chords
 
-SEVEN_CHORDS = {
-    "MAJOR_SEVEN": [
-        "MAJOR",
-        "LYDIAN",
-        "LYDIAN_SHARP_TWO"
-    ],
-
-    "MINOR_SEVEN": [
-        "DORIAN",
-        "PHRYGIAN",
-        "NATURAL_MINOR",
-        "DORIAN_FLAT_TWO",
-        "DORIAN_SHARP_FOUR"
-    ],
-    
-    "SEVEN": [
-        "MIXOLYDIAN",
-        "LYDIAN_DOMINANT",
-        "AEOLIAN_DOMINANT",
-        "PHRYGIAN_DOMINANT"
-    ],
-
-    "MINOR_SEVEN_FLAT_FIVE" : [
-        "LOCRIAN",
-        "HALF_DIMINISHED",
-        "ALTERED",
-        "LOCRIAN_NATURAL_SIX"
-    ],
-
-    "SEVEN_ALTERED" : [
-        "ALTERED"
-    ],
-
-    "MINOR_MAJOR_SEVEN" : [
-        "MELODIC_MINOR",
-        "HARMONIC_MINOR"
-    ],
-
-    "MAJOR_SEVEN_SHARP_FIVE" : [
-        "LYDIAN_AUGMENTED",
-        "MAJOR_SHARP_FIVE"
-    ],
-
-    "DIMINISHED_SEVEN" : [
-        "ALTERED_DOMINANT_DOUBLE_FLAT_SEVEN"
-    ]
+CHORDS = {
+    "MAJOR_SEVEN": {
+        "scales": [
+            "MAJOR",
+            "LYDIAN",
+            "LYDIAN_SHARP_TWO",
+            "HARMONIC_MAJOR",
+            "AUGMENTED"
+        ],
+        "intervals": [
+            4,
+            3,
+            4
+        ]
+    },
+    "MINOR_SEVEN": {
+        "scales": [
+            "DORIAN",
+            "PHRYGIAN",
+            "NATURAL_MINOR",
+            "DORIAN_FLAT_TWO",
+            "DORIAN_SHARP_FOUR",
+            "PHRYGIAN_FLAT_FOUR"
+        ],
+        "intervals": [
+            3,
+            4,
+            3
+        ]
+    },
+    "SEVEN": {
+        "scales": [
+            "MIXOLYDIAN",
+            "LYDIAN_DOMINANT",
+            "AEOLIAN_DOMINANT",
+            "PHRYGIAN_DOMINANT",
+            "PRYGIAN_FLAT_FOUR",
+            "MIXOLYDIAN_FLAT_TWO",
+            "INVERTED_DIMINISHED"
+        ],
+        "intervals": [
+            4,
+            3,
+            3
+        ]
+    },
+    "MINOR_SEVEN_FLAT_FIVE": {
+        "scales": [
+            "LOCRIAN",
+            "HALF_DIMINISHED",
+            "ALTERED",
+            "LOCRIAN_NATURAL_SIX",
+            "DORIAN_FLAT_FIVE"
+        ],
+        "intervals": [
+            3,
+            3,
+            4
+        ]
+    },
+    "SEVEN_ALTERED": {
+        "scales": [
+            "ALTERED"
+        ],
+        "intervals": [
+            4,
+            3,
+            3
+        ]
+    },
+    "MINOR_MAJOR_SEVEN": {
+        "scales": [
+            "MELODIC_MINOR",
+            "HARMONIC_MINOR",
+            "LYDIAN_FLAT_THREE"
+        ],
+        "intervals": [
+            3,
+            4,
+            4
+        ]
+    },
+    "MAJOR_SEVEN_SHARP_FIVE": {
+        "scales": [
+            "LYDIAN_AUGMENTED",
+            "MAJOR_SHARP_FIVE",
+            "LYDIAN_AUGMENTED_SHARP_TWO"
+        ],
+        "intervals": [
+            4,
+            4,
+            3
+        ]
+    },
+    "DIMINISHED_SEVEN": {
+        "scales": [
+            "ALTERED_DOMINANT_DOUBLE_FLAT_SEVEN",
+            "LOCRIAN_DOUBLE_FLAT_SEVEN",
+            "DIMINISHED"
+        ],
+        "intervals": [
+            3,
+            3,
+            3
+        ]
+    },
+    "SEVEN_FLAT_FIVE_SHARP_FIVE": {
+        "scales": [
+            "WHOLE_TONE"
+        ],
+        "intervals": [
+            4,
+            2,
+            3
+        ]
+    },
+    "SIX_SHARP_FIVE": {
+        "scales": [
+            "INVERTED_AUGMENTED"
+        ],
+        "intervals": [
+            4,
+            4,
+            3
+        ]
+    }
 }
 
 
-def generate_scale(tonic, scale, octaves):
+def generate_scale(note_name: str, start_octave: int, scale_name: str, total_octaves: int = 1):
+    scale = SCALES[scale_name]
+    return __generate_scale(note_name=note_name, start_octave=start_octave,
+                            scale=scale, total_octaves=total_octaves)
+
+
+def __generate_scale(note_name: str, start_octave: int, scale: list, total_octaves: int = 1):
     scale_notes = []
     octave = 0
-    while octave < octaves:
-        tonic_tmp = tonic + (12 * (octave))
+    tonic_midi_number = notes.NOTES[note_name][start_octave]["midi_number"]
+    while octave < total_octaves:
+        tonic_tmp = tonic_midi_number + (12 * (octave))
         scale_notes += [tonic_tmp]
         for interval in scale:
             tonic_tmp += interval
             scale_notes += [tonic_tmp]
         octave += 1
     return scale_notes
+
+
+def generate_chord(note_name: str, start_octave: int, chord_name: str):
+    chord = CHORDS[chord_name]["intervals"]
+    return __generate_scale(note_name=note_name, start_octave=start_octave,
+                            scale=chord)
